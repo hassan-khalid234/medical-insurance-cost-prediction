@@ -1,10 +1,15 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import os
 
-# Load trained model and the exact column order it was trained on
-model = joblib.load("model.pkl")
-model_columns = joblib.load("model_columns.pkl")
+# Resolve paths relative to this script's own folder, not the working
+# directory — Streamlit Cloud runs the app with the repo root as cwd,
+# so a bare "model.pkl" fails even though the file sits right next to
+# this script.
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model = joblib.load(os.path.join(BASE_DIR, "model.pkl"))
+model_columns = joblib.load(os.path.join(BASE_DIR, "model_columns.pkl"))
 
 st.title("Medical Insurance Cost Predictor")
 st.write("Enter customer details to estimate insurance charges.")
